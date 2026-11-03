@@ -1,0 +1,8 @@
+name: SimulatedPlayersProbe
+main: probe.SimulatedPlayersProbe
+version: "1.0"
+api: ["3.0.6"]
+depend: [NFactionsX, FrenchEconomy, SRegionProtector]
+commands:
+  simulatedplayers:
+    description: Isolated server-side simulated actor tests

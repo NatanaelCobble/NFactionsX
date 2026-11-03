@@ -1,0 +1,36 @@
+VALIDATION LOCALE - 3 novembre 2026
+
+Serveur : PowerNukkitX officiel 3.0.6, Java 25, 127.0.0.1:19143.
+Plugins : NFactionsX, NVaultX, FrenchEconomy, LuckPerms, ShopUI,
+StatBoard, PlaceholderAPI, SRegionProtector.
+
+159 verifications reussies :
+- 96 assertions du coeur : permissions, claims, PvP, raids, journal,
+  stockage et configuration des menus.
+- 26 assertions sur serveur : services, economie FrenchEconomy via
+  NVaultX, conservation des fonds, placeholders, regions, fluides,
+  filtres d'explosion TNT.
+- 37 assertions de parcours avec quatre joueurs simules : commandes
+  enregistrees, vrais callbacks de formulaires, creation, invitations,
+  grades, claims, casse/pose, coffre double, retrait des droits pendant
+  une ouverture, depots/retraits et double validation, diplomatie,
+  PvP, combat, zone sure, bypass et confirmation de dissolution.
+
+Derniere execution serveur : 22:58:32-22:58:34 Europe/Paris.
+Les deux sondes sont passees sans ERROR ni exception dans cet intervalle.
+Le serveur a aussi ete arrete proprement et redemarre pendant la recette.
+Les factions temporaires laissees par un premier essai ont ete supprimees.
+
+Preuves : dernier-test.log et plugins/SimulatedPlayersProbe/reports/
+(resultats individuels et formulaires JSON).
+
+Limites : les acteurs Player sont simules avec Mockito. Aucun client
+Bedrock ne s'est connecte. Ces tests ne valident pas le rendu mobile/PC,
+les paquets reseau, les mouvements ou transferts d'inventaire reels,
+ni la physique complete d'un raid TNT ou la tenue en charge publique.
+Les autres plugins sont charges ensemble ; leurs fonctionnalites ne
+font pas toutes l'objet d'une recette exhaustive.
+
+Le serveur reste local et actif. Voir LISEZ-MOI.txt pour les commandes
+de demarrage, de test et d'arret. Les sondes et Mockito sont reserves
+a cet environnement et ne sont pas embarques dans NFactionsX.

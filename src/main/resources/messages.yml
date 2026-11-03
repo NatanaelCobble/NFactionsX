@@ -1,0 +1,171 @@
+prefix: "&8[&bNFactions&8] &r"
+wilderness: "Territoire libre"
+online: "&aEn ligne"
+visitor: Visiteur
+offline: "&7Hors ligne"
+zone:
+  safe: "&aZone sûre"
+  war: "&cZone de guerre"
+role:
+  RECRUIT: Recrue
+  MEMBER: Membre
+  OFFICER: Officier
+  LEADER: Chef
+relation:
+  NEUTRAL: "&7Neutre"
+  ALLY: "&aAllié / accepter une alliance"
+  ENEMY: "&cEnnemi"
+mode:
+  public: public
+  faction: faction
+  ally: alliés
+upgrade:
+  members: Effectif
+  claims: Limite de territoires
+  warps: Points stratégiques
+action:
+  BUILD: Construire / détruire
+  INTERACT: Interagir
+  CONTAINER: Ouvrir les coffres
+  INVITE: Inviter
+  KICK: Exclure
+  CLAIM: Gérer les territoires et bases
+  HOME: Rejoindre la base
+  WARP: Utiliser les warps
+  WITHDRAW: Retirer de la banque
+  DIPLOMACY: Gérer la diplomatie
+  SETTINGS: Modifier les paramètres / lire le journal
+  UPGRADE: Acheter des améliorations
+ui:
+  manage: "&7Les outils avancés de votre faction, réunis au même endroit. Les permissions sont vérifiées à chaque action."
+  welcome: "&b&lBÂTISSEZ VOTRE EMPIRE\n&r&7Fondez votre faction, rassemblez votre équipe et contrôlez les territoires.\n\n&6Mode compétitif &8• &fRaids TNT et conquêtes\n&7Consultez /f help pour les commandes."
+  summary: "&b&l{name}\n&r&7{description}\n\n&fVotre grade &8› &b{role}\n&fEffectif &8› &b{members}\n&fPower &8› &b{power}\n&fClaims &8› &b{claims}&7 / &b{capacity}\n&fTrésorerie &8› &6{bank}\n\n&7La capacité dépend du power et de la limite de claims."
+  faction-name: "Nom de faction : 3 à 16 lettres, chiffres ou _"
+  player-name: "Nom exact d'un joueur déjà connu du serveur"
+  directory: "&7{count} factions &8• &fPage {page}\n&7Classement par trésorerie de faction."
+  directory-entry: "&b{name}\n&7{members} membres &8• &6{bank}"
+  member-count: "&7{count} membres dans votre équipe."
+  member-entry: "&f{name} &8• {online}\n&7{role}"
+  member-detail: "&b{name}\n&7Grade actuel : &f{role}"
+  rank-action: "&bAttribuer le grade : &f{role}"
+  claims: "&fZone &8› &b{territory}\n&fMonde &8› &7{world}\n&fChunk &8› &b{x}, {z}\n&fClaims &8› &b{claims} / {capacity}\n&fCoût par claim &8› &6{cost}\n\n&7Les TNT peuvent endommager les territoires en mode raid."
+  warps: "&7Vos points stratégiques. Les destinations doivent rester dans vos territoires et être sûres."
+  warp-name: "Nom du warp : lettres, chiffres, _ ou - (16 max.)"
+  warp-entry: "&b{name}\n&7Téléportation et gestion"
+  bank: "&6&lTRÉSORERIE\n&r&fSolde &8› &6{balance}\n&fFournisseur &8› &7{provider}\n&fOpérations en attente &8› &e{pending}\n\n&7Une opération incertaine bloque la banque jusqu'à vérification par le staff."
+  amount: "Montant positif, deux décimales maximum"
+  description: "Description publique (120 caractères max.)"
+  motd: "Message de connexion des membres (200 caractères max.)"
+  open: "Recrutement ouvert sans invitation"
+  allies-interact: "Autoriser les interactions simples des alliés (hors coffres et construction)"
+  permissions: "&7Choisissez une action puis le grade minimal autorisé. Les opérations de chef restent réservées au chef."
+  permission-entry: "&b{action}\n&7Grade minimal : &f{role}"
+  relations: "&7Une alliance nécessite l'accord des deux factions. Déclarer un ennemi ou la neutralité met à jour les deux côtés."
+  relation-entry: "&f{name}\n{relation} {request}"
+  ally-request: "&eDemande reçue"
+  upgrades: "&fTrésorerie &8› &6{balance}\n&7Le prix augmente à chaque niveau. Le power limite toujours les claims."
+  upgrade-entry: "&b{name} &7{level}/{max}\n&6Prix du prochain niveau : {cost}"
+confirm-leave: "&eQuitter votre faction ?\n&7Vous perdrez vos accès à ses territoires et à sa banque."
+confirm-disband: "&cDissoudre votre faction ?\n&7Les territoires, invitations et relations seront supprimés. La banque doit être vide."
+confirm-leader: "&eTransférer la direction ?\n&7Vous deviendrez officier. Le nouveau chef aura le contrôle de la faction."
+confirm-kick: "&eExclure ce membre et retirer ses accès ?"
+confirm-unclaim: "&eLibérer le chunk où vous vous trouvez au moment de la confirmation ?\n&7Les bases et warps situés sur ce claim seront supprimés."
+confirm-delete: "&eSupprimer ce point stratégique ?"
+confirm-upgrade: "&eAcheter cette amélioration avec la banque de faction ?\n&7Le niveau et le prix sont vérifiés à la confirmation."
+permission-denied: "&cVous n'avez pas la permission."
+rank-denied: "&cVotre grade de faction ne permet pas cette action."
+no-faction: "&eVous n'avez pas de faction. Utilisez /f pour commencer."
+already-faction: "&cCe joueur appartient déjà à une faction."
+name-invalid: "&cNom invalide : 3 à 16 lettres, chiffres ou _."
+name-used: "&cCe nom est déjà utilisé."
+server-limit: "&cLe serveur a atteint sa limite de factions."
+player-unknown: "&cJoueur inconnu. Il doit s'être déjà connecté au serveur."
+faction-unknown: "&cFaction introuvable."
+invite-required: "&cCette faction exige une invitation valide."
+invite-limit: "&cCette faction a trop d'invitations en attente."
+members-full: "&cLa faction a atteint sa limite de membres."
+leader-transfer: "&eTransférez la direction avant de quitter, ou dissolvez la faction."
+leader-only: "&cCette opération est réservée au chef."
+not-member: "&cCe joueur n'est plus membre de votre faction."
+target-invalid: "&cCible ou option invalide."
+text-long: "&cTexte trop long."
+world-disabled: "&cLes claims sont désactivés dans ce monde."
+zone-protected: "&cCe chunk est réservé au serveur."
+already-claimed: "&eCe chunk vous appartient déjà."
+power-low: "&cPower ou capacité insuffisants pour un claim supplémentaire."
+bank-low: "&cSolde insuffisant ou limite de banque atteinte."
+bank-locked: "&eBanque bloquée par une transaction en attente. Contactez le staff."
+empty-bank-first: "&eVidez la banque avant de dissoudre la faction."
+claim-owned: "&cCe territoire appartient à une faction qui ne peut pas être conquise actuellement."
+claim-edge: "&cLa conquête doit commencer en bordure du territoire ennemi."
+claim-adjacent: "&cLe nouveau claim doit toucher un de vos territoires dans ce monde."
+not-claimed: "&eCe chunk n'est pas revendiqué."
+home-own-land: "&cLa destination doit être dans un territoire de votre faction."
+warp-invalid: "&cNom de warp invalide (16 caractères maximum)."
+warps-full: "&cLimite de warps atteinte."
+power-invalid: "&cValeur de power hors limites."
+upgrade-max: "&eNiveau maximal atteint."
+amount-invalid: "&cMontant invalide. Utilisez un nombre positif avec deux décimales maximum."
+transfer-invalid: "&cOpération absente ou déjà résolue."
+economy-missing: "&eAucun fournisseur économique NVaultX actif."
+economy-account: "&eVotre fournisseur économique ne possède pas encore de compte à votre nom."
+transfer-pending: "&eRésultat économique incertain. Banque bloquée ; ne répétez pas l'opération et contactez le staff."
+transfer-refused: "&cLe fournisseur économique a refusé l'opération."
+storage-readonly: "&cLe stockage est indisponible. Modifications bloquées ; contactez le staff."
+internal-error: "&cL'opération a échoué. Consultez la console du serveur."
+feature-disabled: "&eCette fonctionnalité est désactivée sur le serveur."
+cooldown: "&7Patientez un instant avant une nouvelle commande."
+player-only: "&eCette commande nécessite un joueur en jeu."
+combat-blocked: "&cAction impossible pendant votre délai de combat."
+offline-protected: "&cLa protection hors ligne de cette faction est active."
+region-overlap: "&cClaim refusé : région SRegionProtector présente ou vérification indisponible."
+home-missing: "&eBase ou warp non défini."
+world-unloaded: "&eLe monde de destination n'est pas chargé."
+teleport-unsafe: "&cLa destination n'est pas sûre. Faites redéfinir la base ou le warp."
+teleport-wait: "&bTéléportation dans {seconds} secondes. Restez immobile et hors combat."
+teleport-cancelled: "&eTéléportation annulée."
+teleport-done: "&aTéléportation effectuée."
+territory-enter: "&8» &f{territory} &8«"
+created: "&aFaction {name} créée."
+invited: "&aInvitation envoyée. Le joueur peut utiliser /f join NOM."
+invite-received: "&bVous êtes invité dans {faction}. Utilisez &f/f join {faction}&b."
+joined: "&aVous avez rejoint la faction."
+left: "&eVous avez quitté la faction."
+disbanded: "&eFaction dissoute."
+claimed: "&aChunk {x}, {z} revendiqué."
+unclaimed: "&eChunk libéré."
+saved: "&aModification enregistrée."
+bank-done: "&aOpération économique confirmée."
+relation-updated: "&aDemande ou relation diplomatique enregistrée."
+power: "&fVotre power : &b{power}&7 / {max}"
+motd: "&bMessage de faction &8› &f{text}"
+chat-mode: "&bCanal actif : &f{mode}"
+chat-faction: "&8[&bF &f{faction}&8] &b{player} &8› &f{message}"
+chat-ally: "&8[&aA &f{faction}&8] &a{player} &8› &f{message}"
+spy-prefix: "&8[&eESPION&8] &r"
+map-title: "&b&lCARTE DES TERRITOIRES &r&7(Nord en haut)"
+map-legend: "&e+ Vous &8| &aS Zone sûre &8| &cW Guerre &8| &bBleu Votre faction &8| &aVert Allié &8| &cRouge Ennemi"
+admin-status: "&fFactions : &b{factions} &8| &fClaims : &b{claims} &8| &fTransactions en attente : &e{pending} &8| &fStockage : &a{storage}"
+admin-toggle: "&eMode administrateur : {state}"
+reloaded: "&aConfiguration, messages et menus rechargés."
+config-invalid: "&cConfiguration invalide. Les réglages précédents sont conservés ; consultez la console."
+console-help: "&7Console : /f admin status|reload|pending|resolve|power|disband"
+usage: "&eSyntaxe invalide. Consultez /f help."
+help: |-
+  &b&lNFactionsX &r&7— /f ouvre les menus
+  &f/f create <nom> &8• &f/f invite <joueur> &8• &f/f join <faction>
+  &f/f members &8• &f/f rank <joueur> RECRUIT|MEMBER|OFFICER|LEADER
+  &f/f kick <joueur> &8• &f/f leave &8• &f/f disband
+  &f/f claim &8• &f/f unclaim &8• &f/f map &8• &f/f power
+  &f/f sethome &8• &f/f home &8• &f/f setwarp <nom> &8• &f/f warp <nom>
+  &f/f delwarp <nom> &8• &f/f list &8• &f/f show [faction]
+  &f/f ally|enemy|neutral <faction> &8• &f/f relations
+  &f/f bank [deposit|withdraw <montant>] &8• &f/f upgrades
+  &f/f upgrade members|claims|warps &8• &f/f settings &8• &f/f perms
+  &f/f rename <nom> &8• &f/f admin unclaim
+  &f/f chat public|faction|ally &8• &f/f audit
+  &7Staff : /f admin status|reload|zone safe|war|none|bypass|spy
+  &7/f admin power <joueur> <valeur>
+  &7/f admin pending
+  &7/f admin resolve <id> success|failed confirm
+  &7/f admin disband <faction> confirm

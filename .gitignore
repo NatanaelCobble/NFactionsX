@@ -1,0 +1,7 @@
+/build/
+/deps/
+*.class
+*.log
+javac.*.args
+.idea/
+.vscode/

@@ -1,0 +1,25 @@
+name: NFactionsX
+main: org.nfactionsx.NFactionsPlugin
+version: "1.0.0"
+api: ["3.0.6"]
+author: Natanael
+description: Competitive factions, territory protection and native Bedrock menus
+depend: [NVaultX]
+softdepend: [PlaceholderAPI, SRegionProtector, WorldManager, LuckPerms]
+load: POSTWORLD
+commands:
+  f:
+    aliases: [faction, factions, nfactions]
+    description: Ouvrir le menu des factions
+    usage: /f help
+    permission: nfactions.use
+permissions:
+  nfactions.use:
+    default: true
+    description: Utiliser les factions
+  nfactions.admin:
+    default: op
+    description: Administrer les factions et les transactions en attente
+  nfactions.bypass:
+    default: op
+    description: Autoriser le mode bypass explicite

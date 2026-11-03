@@ -1,0 +1,70 @@
+# Les formulaires sont rendus par Minecraft Bedrock ; couleurs, textes, icônes et ordre sont modifiables.
+page-size: 8
+theme:
+  title-prefix: "&b&lN&fFACTIONS &8| &r"
+dashboard-actions: [overview, members, claims, home, warps, bank, relations, manage]
+titles:
+  dashboard: "&fVotre empire commence ici"
+  manage: "&bGestion de faction"
+  create: "&bFonder une faction"
+  overview: "&bIdentité de faction"
+  directory: "&6Classement des factions"
+  members: "&bVotre équipe"
+  member: "&bGestion d'un membre"
+  invite: "&bInviter un joueur"
+  claims: "&bContrôle du territoire"
+  warps: "&bPoints stratégiques"
+  bank: "&6Trésorerie de faction"
+  settings: "&bPersonnalisation"
+  permissions: "&bMatrice des permissions"
+  relations: "&bDiplomatie"
+  upgrades: "&6Développer votre empire"
+  audit: "&bJournal d'activité"
+  confirm: "&6Confirmer votre choix"
+buttons:
+  manage: "&bGérer la faction\n&7Améliorations, réglages et historique"
+  create: "&b&lFONDER UNE FACTION\n&r&7Choisissez votre identité"
+  overview: "&bVue d'ensemble\n&7Identité, power et statistiques"
+  members: "&bMembres & grades\n&7Recruter et organiser"
+  claims: "&bTerritoires\n&7Revendiquer, conquérir, carte"
+  home: "&bRentrer à la base\n&7Téléportation sécurisée"
+  warps: "&bPoints stratégiques\n&7Gérer les warps de faction"
+  bank: "&6Banque\n&7Dépôts et retraits via NVaultX"
+  relations: "&bDiplomatie\n&7Alliances et ennemis"
+  upgrades: "&6Améliorations\n&7Investir dans la faction"
+  chat: "&bCanal de faction\n&7Basculer public / privé"
+  settings: "&bParamètres\n&7Description et recrutement"
+  permissions: "&bPermissions\n&7Définir les accès par grade"
+  audit: "&bHistorique\n&7Les 100 dernières actions"
+  directory: "&6Factions & classement\n&7Découvrir vos concurrents"
+  leave: "&eQuitter la faction"
+  disband: "&cDissoudre la faction"
+  invite: "&bInviter un joueur"
+  kick: "&cExclure ce joueur"
+  claim: "&aRevendiquer ce chunk"
+  unclaim: "&cLibérer ce chunk"
+  map: "&bAfficher la carte"
+  sethome: "&bDéfinir la base ici"
+  addwarp: "&aCréer un warp ici"
+  teleport: "&bSe téléporter"
+  delete: "&cSupprimer"
+  join: "&aRejoindre la faction"
+  deposit: "&aDéposer de l'argent"
+  withdraw: "&6Retirer de l'argent"
+  previous: "&7← Page précédente"
+  next: "&bPage suivante →"
+  back: "&7← Retour"
+  submit: "Valider"
+  confirm: "&aConfirmer"
+  cancel: "&7Annuler"
+icons:
+  create: textures/items/diamond
+  members: textures/items/iron_helmet
+  claims: textures/items/map_filled
+  home: textures/items/bed_red
+  bank: textures/items/gold_ingot
+  relations: textures/items/iron_sword
+  upgrades: textures/items/diamond_pickaxe
+  settings: textures/items/book_written
+  directory: textures/items/gold_helmet
+  manage: textures/items/book_written

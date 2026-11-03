@@ -1,0 +1,122 @@
+package org.nfactionsx;
+
+import org.nfactionsx.core.*;
+import org.nfactionsx.core.Model.*;
+import org.powernukkitx.form.window.*;
+import org.powernukkitx.form.element.simple.ButtonImage;
+import org.yaml.snakeyaml.Yaml;
+import java.nio.file.*;
+import java.util.*;
+
+/** Contract tests for authority, economic journals, protection policy and persistence recovery. */
+public final class CoreTests {
+    private static int assertions;
+    private static final String A=UUID.randomUUID().toString(),B=UUID.randomUUID().toString(),C=UUID.randomUUID().toString(),D=UUID.randomUUID().toString();
+    private static void check(boolean condition,String label){assertions++;if(!condition)throw new AssertionError(label);}
+    private static void denied(Runnable action,String label){assertions++;try{action.run();throw new AssertionError("Expected rejection: "+label);}catch(IllegalArgumentException|IllegalStateException expected){}}
+    public static void main(String[] args)throws Exception{
+        Path root=Path.of(args[0]).resolve(UUID.randomUUID().toString());Files.createDirectories(root);
+        Rules rules=new Rules();StateStore store=new StateStore(root.resolve("state.json"));FactionEngine e=new FactionEngine(store,rules);
+        e.seen(A,"Alice");e.seen(B,"Bob");e.seen(C,"Carol");e.seen(D,"Dana");
+        denied(()->e.create(A,"bad name"),"invalid faction name");e.create(A,"Alpha");e.create(B,"Beta");
+        String alpha=e.faction(A).id,beta=e.faction(B).id;
+        denied(()->e.create(D,"ALPHA"),"case-insensitive duplicate");denied(()->e.create(A,"Again"),"one faction per UUID");
+        denied(()->e.join(C,alpha),"invitation required");e.invite(A,C);e.join(C,alpha);
+        check(e.faction(C).members.get(C)==Role.RECRUIT,"new member is recruit");
+        denied(()->e.rank(C,A,Role.RECRUIT),"recruit cannot demote leader");denied(()->e.kick(C,A),"recruit cannot kick leader");
+        e.claim(A,"world",0,0);String homeKey=Model.chunk("world",0,0);
+        check(!e.canAccess(C,homeKey,Action.BUILD,false),"recruit cannot build by default");e.rank(A,C,Role.MEMBER);
+        check(e.canAccess(C,homeKey,Action.BUILD,false),"member can build");check(!e.canAccess(B,homeKey,Action.CONTAINER,false),"enemy containers denied");
+        check(e.canAccess(B,homeKey,Action.BUILD,true),"explicit administrative bypass");
+        check(Model.block("world",-1,-17).equals(Model.chunk("world",-1,-2)),"negative coordinates use floor division");
+        check(!Model.chunk("a:1",0,0).equals(Model.chunk("a",1,0)),"world key unambiguous");
+        check(Model.validChunk(Model.chunk("world:nether",-1,2)),"chunk key roundtrip with colon in world");
+        check(!Model.validChunk("world:0:0")&&!Model.validChunk("1:a:01:0"),"malformed and noncanonical keys rejected");
+        denied(()->e.claim(C,"world",1,0),"member cannot claim");denied(()->e.claim(A,"world",7,7),"adjacency enforced");
+        denied(()->e.claim(A,"world",0,0),"duplicate claim");
+        e.diplomacy(A,beta,Relation.ALLY);check(e.relation(alpha,beta)==Relation.NEUTRAL,"alliance requires consent");
+        e.diplomacy(B,alpha,Relation.ALLY);check(e.relation(alpha,beta)==Relation.ALLY&&e.relation(beta,alpha)==Relation.ALLY,"bilateral alliance");
+        check(!e.pvp(A,B,homeKey,homeKey),"allied friendly fire blocked");
+        e.settings(A,"A &c description","hello",false,true);
+        check(e.faction(A).description.equals("A c description"),"untrusted color controls removed");
+        check(e.canAccess(B,homeKey,Action.INTERACT,false),"opt-in ally interaction");
+        check(!e.canAccess(B,homeKey,Action.BUILD,false)&&!e.canAccess(B,homeKey,Action.CONTAINER,false),"ally cannot build or open chests");
+        e.diplomacy(A,beta,Relation.ENEMY);check(e.relation(beta,alpha)==Relation.ENEMY,"enemy bilateral");
+        check(e.pvp(A,B,homeKey,homeKey),"enemy PvP allowed");check(!e.pvp(A,C,homeKey,homeKey),"same faction PvP blocked");
+        e.zone(Model.chunk("world",9,9),"safe");check(!e.pvp(A,B,Model.chunk("world",9,9),homeKey),"safezone blocks attacks from outside");
+        check(!e.pvp(A,B,homeKey,Model.chunk("world",9,9)),"safezone protects target");
+        check(!e.explosionAllowed(Model.chunk("world",9,9),Set.of(A,B)),"safezone explosions blocked");
+        denied(()->e.claim(A,"world",9,9),"server zone cannot be claimed");
+        e.claim(A,"world",1,0);e.claim(B,"world",2,0);e.claim(B,"world",3,0);e.claim(B,"world",4,0);
+        e.home(B,"home",new Home("world",33.5,65,0.5,0,0));e.home(B,"mine",new Home("world",33.5,65,0.5,0,0));
+        denied(()->e.claim(A,"world",2,0),"healthy enemy cannot be overclaimed");e.adminPower(B,0);
+        check(e.capacity(beta)==0,"power zero gives no claim capacity");
+        e.claim(A,"world",2,0);check(e.owner(Model.chunk("world",2,0)).equals(alpha),"weak edge overclaimed");
+        check(e.faction(B).home==null&&e.faction(B).warps.isEmpty(),"captured land invalidates enemy homes/warps");
+        rules.graceUntil=System.currentTimeMillis()+60000;
+        denied(()->e.claim(A,"world",3,0),"grace blocks overclaim");check(!e.explosionAllowed(homeKey,Set.of(A)),"grace blocks TNT");rules.graceUntil=0;
+        rules.offlineRaids=false;check(!e.explosionAllowed(Model.chunk("world",3,0),Set.of(A)),"offline protection");
+        check(e.explosionAllowed(Model.chunk("world",3,0),Set.of(B)),"online raid allowed");rules.offlineRaids=true;
+        rules.raids=false;denied(()->e.claim(A,"world",3,0),"raids disabled prevents overclaim");rules.raids=true;
+        rules.disabledWorlds.add("lobby");denied(()->e.claim(A,"lobby",0,0),"disabled world");
+        double initial=e.profile(A).power;e.death(A);check(e.profile(A).power==initial-rules.deathLoss,"death loses power");
+        double lost=e.profile(A).power;e.regenerate(Set.of(C));check(e.profile(A).power==lost,"offline player does not regenerate");
+        e.regenerate(Set.of(A));check(e.profile(A).power>lost,"online regeneration");
+        denied(()->e.adminPower(A,Double.NaN),"non-finite admin power");
+        e.home(A,"home",new Home("world",1.5,65,1.5,0,0));e.unclaim(A,homeKey,false);
+        check(e.faction(A).home==null,"unclaim invalidates home");
+        e.permission(A,Action.CLAIM,Role.MEMBER);e.claim(C,"world",0,0);check(e.owner(homeKey).equals(alpha),"configurable rank access");
+        denied(()->e.permission(C,Action.WITHDRAW,Role.RECRUIT),"member cannot alter policy");
+        check(FactionEngine.cents("12,34")==1234&&FactionEngine.cents("12.3")==1230,"exact cents parser");
+        for(String invalid:List.of("-1","NaN","Infinity","1e3","1.001","","999999999999999999999"))denied(()->FactionEngine.cents(invalid),"invalid money "+invalid);
+        String deposit=e.beginTransfer(A,"Alice","FrenchEconomy",100000,false,1000);
+        check(e.faction(A).bank==0,"prepared deposit does not mint bank money");
+        denied(()->e.beginTransfer(A,"Alice","FrenchEconomy",100,false,1000),"concurrent bank operations blocked");
+        denied(()->e.upgrade(A,"members"),"pending transfer locks upgrades");
+        FactionEngine restarted=new FactionEngine(store,rules);check(restarted.snapshot().transfers.get(deposit).status.equals("PENDING"),"journal survives crash");
+        restarted.resolveTransfer(deposit,true,A);check(restarted.faction(A).bank==100000,"confirmed deposit credits once");
+        denied(()->restarted.resolveTransfer(deposit,true,A),"double resolution prevented");
+        denied(()->restarted.beginTransfer(C,"Carol","FrenchEconomy",100,true,0),"member cannot withdraw bank");
+        String withdrawal=restarted.beginTransfer(A,"Alice","FrenchEconomy",25000,true,1000);
+        check(restarted.faction(A).bank==75000,"withdrawal reserved before external write");
+        FactionEngine crashed=new FactionEngine(store,rules);check(crashed.faction(A).bank==75000,"reservation survives crash");
+        crashed.resolveTransfer(withdrawal,false,"ADMIN");check(crashed.faction(A).bank==100000,"failed external deposit releases reservation");
+        String success=crashed.beginTransfer(A,"Alice","FrenchEconomy",1000,true,0);crashed.resolveTransfer(success,true,A);
+        check(crashed.faction(A).bank==99000,"confirmed withdrawal not debited twice");
+        long beforeUpgrade=crashed.faction(A).bank;crashed.upgrade(A,"members");check(crashed.faction(A).bank==beforeUpgrade-rules.upgradeCost,"upgrade uses bank only");
+        denied(()->crashed.disband(A,false,alpha),"nonempty bank prevents money destruction");
+        crashed.rename(A,"AlphaNew");check(crashed.faction(A).name.equals("AlphaNew"),"rename preserves UUID ownership");
+        denied(()->crashed.rename(A,"beta"),"rename cannot collide");
+        denied(()->crashed.configure(A,"beta","changed","",true,false),"combined settings cannot collide");
+        check(crashed.faction(A).name.equals("AlphaNew"),"failed settings retain previous identity");
+        crashed.rank(A,C,Role.LEADER);check(crashed.faction(C).members.get(A)==Role.OFFICER,"leadership transfer demotes previous chief");
+        denied(()->crashed.leave(C),"leader cannot orphan faction");denied(()->crashed.rank(A,C,Role.RECRUIT),"former leader cannot reclaim leadership");
+        crashed.rank(C,A,Role.LEADER);crashed.kick(A,C);check(crashed.faction(C)==null,"kick removes membership in both directions");
+        State detached=crashed.snapshot();detached.factions.clear();check(crashed.faction(A)!=null,"snapshots cannot mutate engine");
+        long remaining=crashed.faction(A).bank;String end=crashed.beginTransfer(A,"Alice","FrenchEconomy",remaining,true,0);crashed.resolveTransfer(end,true,A);
+        crashed.disband(A,false,alpha);check(crashed.faction(A)==null&&crashed.snapshot().claims.values().stream().noneMatch(alpha::equals),"disband releases claims and members");
+        FactionEngine finalReload=new FactionEngine(store,rules);check(finalReload.byName("Beta")!=null,"other faction persisted");
+        check(Files.exists(root.resolve("state.json.bak")),"previous snapshot backup retained");
+        Path corrupt=root.resolve("corrupt.json");Files.writeString(corrupt,"{broken");boolean failed=false;try{new FactionEngine(new StateStore(corrupt),rules);}catch(java.io.IOException expected){failed=true;}check(failed,"corrupt state never replaced with empty state");
+        Path missing=root.resolve("missing.json");Files.writeString(root.resolve("missing.json.bak"),"{}");failed=false;try{new FactionEngine(new StateStore(missing),rules);}catch(java.io.IOException expected){failed=true;}check(failed,"missing live snapshot with backup requires restoration");
+        Path blocked=root.resolve("blocked");Files.writeString(blocked,"not a directory");FactionEngine readOnly=new FactionEngine(new StateStore(blocked.resolve("state.json")),rules);
+        denied(()->readOnly.seen(D,"Dana"),"write error propagated");check(readOnly.readOnly()&&readOnly.profile(D)==null,"failed writes roll back state and freeze mutation");
+        denied(()->readOnly.create(D,"NeverSaved"),"readonly state rejects further writes");
+        Rules invalid=new Rules();invalid.regenPerMinute=Double.NaN;denied(invalid::validate,"invalid config rejected");
+        uiAndConfig();System.out.println("PASS: "+assertions+" assertions (permissions, claims, PvP, raids, journal, storage, UI/config)");
+    }
+    private static void uiAndConfig()throws Exception{
+        Path resources=Path.of(System.getProperty("nfactions.root",".")).resolve("src/main/resources");Yaml yaml=new Yaml();
+        for(String file:List.of("config.yml","messages.yml","menus.yml","plugin.yml"))check(yaml.load(Files.readString(resources.resolve(file))) instanceof Map,"YAML parses "+file);
+        Settings settings=new Settings(resources.toFile());check(settings.rules.raids&&settings.rules.explosions,"competitive default config loads");
+        Path invalidFolder=Files.createDirectories(Path.of(System.getProperty("nfactions.root",".")).resolve("build/test-config-"+UUID.randomUUID()));
+        for(String file:List.of("config.yml","messages.yml","menus.yml"))Files.copy(resources.resolve(file),invalidFolder.resolve(file));
+        Files.writeString(invalidFolder.resolve("config.yml"),"raids:\n  enabled: true\n  enabled: false\n");
+        denied(()->new Settings(invalidFolder.toFile()),"duplicate config keys rejected");
+        SimpleForm form=new SimpleForm("§bNFactions","§7Dashboard").addButton("§6Banque",ButtonImage.Type.PATH.of("textures/items/gold_ingot"));
+        check(form.toJson().contains("gold_ingot")&&form.toJson().contains("Dashboard"),"native UI serializes styled buttons and icons");
+        CustomForm custom=new CustomForm("Faction").addInput("Name","","Alpha").addToggle("Open",false);
+        check(custom.toJson().contains("input")&&custom.toJson().contains("toggle"),"native settings controls serialize");
+        ModalForm modal=new ModalForm("Confirm","Disband?").yes("Yes",p->{}).no("No",p->{});check(modal.toJson().contains("Disband?"),"native confirmation serializes");
+    }
+}

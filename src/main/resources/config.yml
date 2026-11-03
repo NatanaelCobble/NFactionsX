@@ -1,0 +1,69 @@
+# NFactionsX — règles compétitives. Argent en unités monétaires, sous forme de chaînes décimales.
+limits:
+  factions: 500
+  members: 20
+  claims: 100
+  warps: 3
+features:
+  core: true
+  bank: true
+  diplomacy: true
+  upgrades: true
+  teleport: true
+  chat: true
+invites:
+  expiry-seconds: 300
+claims:
+  adjacency: true
+  overclaim: true
+  disabled-worlds: []
+power:
+  start: 10
+  max: 10
+  min: -10
+  death-loss: 2
+  regen-per-minute: 0.2
+raids:
+  enabled: true
+  explosions: true
+  offline: true
+  # Date ISO absolue, ex. "2026-11-10T18:00:00Z" ; chaîne vide pour désactiver la trêve.
+  grace-until: ""
+combat:
+  tag-seconds: 15
+  logout-power-loss: true
+  enemy-only: false
+  friendly-fire: false
+  blocked-commands: [home, spawn, tpa, tpaccept, warp, back]
+protection:
+  fire: false
+teleport:
+  delay-seconds: 5
+commands:
+  cooldown-ms: 350
+economy:
+  claim-cost: "0"
+  upgrade-base-cost: "500"
+  bank-limit: "1000000000000"
+upgrades:
+  max-level: 5
+  members-per-level: 5
+  claims-per-level: 10
+  warps-per-level: 1
+integrations:
+  placeholderapi: true
+  sregion-protector: true
+# Rang minimal par action. Le chef conserve les opérations sensibles de chef.
+roles:
+  build: MEMBER
+  interact: RECRUIT
+  container: MEMBER
+  invite: OFFICER
+  kick: OFFICER
+  claim: OFFICER
+  home: RECRUIT
+  warp: RECRUIT
+  withdraw: OFFICER
+  diplomacy: OFFICER
+  settings: LEADER
+  upgrade: OFFICER

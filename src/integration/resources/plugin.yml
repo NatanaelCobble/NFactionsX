@@ -1,0 +1,8 @@
+name: NFactionsProbe
+main: probe.FactionsProbe
+version: "1.0"
+api: ["3.0.6"]
+depend: [NFactionsX, FrenchEconomy, PlaceholderAPI, SRegionProtector]
+commands:
+  nfactionsprobe:
+    description: Isolated integration probe
